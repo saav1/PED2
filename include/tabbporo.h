@@ -24,6 +24,10 @@ public:
 	TABBPoro();
 	//Consturctor de copia
 	TABBPoro(const TABBPoro &);
+	//Destructor
+	~TABBPoro();
+	//Sobrecarga del operador asignación
+	TABBPoro & operator = (const TABBPoro &);
 	//Métodos del operador igualdad
 	bool operator == (const TABBPoro &);
 	//Devuelve TRUE si el árbol está vacío, FALSE en caso contrario
@@ -32,10 +36,10 @@ public:
 	bool Insertar(const TPoro &);
 	//Borra el elemento en el árbol
 	bool Borrar(const TPoro &);
-	
-	bool Buscar();
+	//Devuelve TRUE si el elemento está en el árbol	
+	bool Buscar(const TPoro &)const;
 	//Devuelve el elemento en la raíz del árbol
-	TPoro raiz()const;
+	TPoro Raiz()const;
 	//Devuelve la altura del árbol (la altura de un árbol vacío es 0)
 	int Altura()const;
 	//Devuelve el número de nodos del árbol (un árbol vacío posee 0 nodos)
