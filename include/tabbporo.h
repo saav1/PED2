@@ -9,6 +9,7 @@ using namespace std;
 class TNodoABB;
 
 class TABBPoro{
+	friend class TNodoABB;
 private:
 	//Puntero al nodo
 	TNodoABB *nodo;
@@ -18,6 +19,13 @@ private:
 	void PreordenAux(TVectorPoro &, int &);
 	//AUXILIAR: Devuleve el recorrido en postorden
 	void PostordenAux(TVectorPoro &, int &);
+
+	//AUXILIAR: Devuelve el siguiente nodo.
+	TNodoABB Siguiente()const;
+	//AUXILIAR: Devuelve el Anterior nodo.
+	TNodoABB Anterior()const;
+	//AUXILIAR: Insertar
+	bool auxInsertar(const TNodoABB &, const TABBPoro &);
 
 public:
 	//Constructor
@@ -65,6 +73,7 @@ friend ostream & operator << (ostream &, TABBPoro &);
 };
 
 class TNodoABB{
+	friend class TABBPoro;
 private:
 	//El elemento del nodo
 	TPoro item;

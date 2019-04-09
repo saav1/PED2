@@ -30,15 +30,17 @@ TNodoABB & TNodoABB::operator = (const TNodoABB &nodoAbb){
 }
 /*...........................................................*/
 
-/*....................TABBPoro...............................*/
+/*....................TABBPoro...............................*/					
 //Constructor
 TABBPoro::TABBPoro():nodo(NULL){}
 
 //Constructor de copia
 TABBPoro::TABBPoro(const TABBPoro &abbPoro){
+	/*El constructor de copia debe copiar todos los nodos del árbol.
+	
 	if(this != &abbPoro){
 		this->nodo = abbPoro.nodo;
-	}
+	}*/
 }
 //
 //Destructor
@@ -61,13 +63,67 @@ bool TABBPoro::operator == (const TABBPoro &abbPoro){
 		(this->nodo != NULL && abbPoro.nodo != NULL)) &&
 		(this->nodo == abbPoro.nodo) ) ? true : false;
 	return iguales;
+
 } 
 
 //Devuelve TRUE si el arbol está vacío
 bool TABBPoro::EsVacio()const{}
 
 //Inserta el elemento en el árbol
-bool TABBPoro::Insertar(const TPoro &poro){}
+bool TABBPoro::Insertar(const TPoro &poro){
+	//Si está vacío el árbol, se pondrá en la raíz el nuevo elemento.
+	TABBPoro auxAbb;
+	TNodoABB auxNodo;
+	
+	if(this->Altura() == 0){
+		auxNodo.item = poro;
+		this->nodo = &auxNodo;
+		return true;
+	}
+	
+	//Comprobamos que no existe ya este poro.
+	if(!Buscar(poro))return false;
+
+	//Asignamos a item el primer elemento del árbol.
+	auxNodo.item = Raiz();
+	*auxAbb.nodo = auxNodo;
+
+	TNodoABB inserNodo;
+	inserNodo.item = poro;
+
+	return auxInsertar(inserNodo, auxAbb);
+	
+
+}
+
+bool TABBPoro::auxInsertar(const TNodoABB &insertNodo, const TABBPoro &arbol){
+	
+
+
+	if(insertNodo.item.Volumen() ==  arbol.nodo->item.Volumen()) return false;
+	
+	if(insertNodo.item.Volumen() < arbol.nodo->item.Volumen() ){
+		
+		if(arbol.nodo->iz.EsVacio()){
+			arbol.nodo->iz.Insertar(insertNodo.item);
+			return true;
+		}else{
+			auxInsertar(insertNodo, arbol);	
+		}
+
+	}else{
+
+		if(arbol.nodo->de.EsVacio()){
+			arbol.nodo->de.Insertar(insertNodo.item);
+			return true;
+		}else{
+			auxInsertar(insertNodo, arbol);	
+		}	
+	}	
+
+	return false;
+}
+
 
 //Borra el elemento del árbol
 bool TABBPoro::Borrar(const TPoro &poro){}
