@@ -11,11 +11,12 @@ main(void)
   TPoro a(1, 2, 3, "rojo");
   TVectorPoro v(5), w;
 
-  cout << "Longitud: " << v.Longitud() << endl;
-  cout << "Longitud: " << w.Longitud() << endl;
+  v[1] = a;
+  v[2] = a;
+  v[3] = a;
+  v[4] = a;
+  v[5] = a;
 
-  w = v;
-
-  cout << "Longitud: " << v.Longitud() << endl;
-  cout << "Longitud: " << w.Longitud() << endl;
+v.Redimensionar(1);
+  cout << v << endl;
 }

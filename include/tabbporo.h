@@ -4,9 +4,10 @@
 #include <iostream>
 #include "tporo.h"
 #include "tvectorporo.h"
-#include "tlistaporo.h"
+
 using namespace std;
 class TNodoABB;
+
 class TABBPoro{
 private:
 	//Puntero al nodo
@@ -19,6 +20,10 @@ private:
 	void PostordenAux(TVectorPoro &, int &);
 
 public:
+	//Constructor
+	TABBPoro();
+	//Consturctor de copia
+	TABBPoro(const TABBPoro &);
 	//Métodos del operador igualdad
 	bool operator == (const TABBPoro &);
 	//Devuelve TRUE si el árbol está vacío, FALSE en caso contrario
@@ -27,6 +32,8 @@ public:
 	bool Insertar(const TPoro &);
 	//Borra el elemento en el árbol
 	bool Borrar(const TPoro &);
+	
+	bool Buscar();
 	//Devuelve el elemento en la raíz del árbol
 	TPoro raiz()const;
 	//Devuelve la altura del árbol (la altura de un árbol vacío es 0)
