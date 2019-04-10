@@ -67,26 +67,38 @@ bool TABBPoro::operator == (const TABBPoro &abbPoro){
 } 
 
 //Devuelve TRUE si el arbol está vacío
-bool TABBPoro::EsVacio()const{}
+bool TABBPoro::EsVacio()const{
+	return true;
+}
 
 //Inserta el elemento en el árbol
 bool TABBPoro::Insertar(const TPoro &poro){
-	//Si está vacío el árbol, se pondrá en la raíz el nuevo elemento.
 	TABBPoro auxAbb;
 	TNodoABB auxNodo;
-	
-	if(this->Altura() == 0){
+	cout << "1-" << endl;
+	//Si el árbol está vacío, se inserta en la raíz.
+	if(Altura() == 0){
+		cout << "2-" << endl; 
 		auxNodo.item = poro;
 		this->nodo = &auxNodo;
 		return true;
+
 	}
 	
+	cout << "3-" << endl;
 	//Comprobamos que no existe ya este poro.
-	if(!Buscar(poro))return false;
+	if(Buscar(poro))return false;
+
+	cout << "4-" << endl;
 
 	//Asignamos a item el primer elemento del árbol.
 	auxNodo.item = Raiz();
-	*auxAbb.nodo = auxNodo;
+	cout << "5-" << endl;
+
+	auxAbb.nodo = &auxNodo;
+
+	cout << "6-" << endl;
+
 
 	TNodoABB inserNodo;
 	inserNodo.item = poro;
@@ -97,10 +109,11 @@ bool TABBPoro::Insertar(const TPoro &poro){
 }
 
 bool TABBPoro::auxInsertar(const TNodoABB &insertNodo, const TABBPoro &arbol){
-	
 
+	if(insertNodo.item.Volumen() ==  arbol.nodo->item.Volumen()) {
+		return false;
 
-	if(insertNodo.item.Volumen() ==  arbol.nodo->item.Volumen()) return false;
+	}
 	
 	if(insertNodo.item.Volumen() < arbol.nodo->item.Volumen() ){
 		
@@ -120,43 +133,70 @@ bool TABBPoro::auxInsertar(const TNodoABB &insertNodo, const TABBPoro &arbol){
 			auxInsertar(insertNodo, arbol);	
 		}	
 	}	
-
 	return false;
 }
 
 
 //Borra el elemento del árbol
-bool TABBPoro::Borrar(const TPoro &poro){}
+bool TABBPoro::Borrar(const TPoro &poro){
+	return false;
+}
 
 //Devuelve TRUE  si el elemento está en el árbol
-bool TABBPoro::Buscar(const TPoro &poro)const{}
+bool TABBPoro::Buscar(const TPoro &poro)const{
+	return false;
+}
 
 //Devuelve el elemento en la raíz del árbol
-TPoro TABBPoro::Raiz()const{}
+TPoro TABBPoro::Raiz()const{
+	TPoro p;
+	return p;
+}
 
 //Devuelve la altura del árbol (la altura de un árbol vacío es 0)
-int TABBPoro::Altura()const{}
+int TABBPoro::Altura()const{
+	return 0;
+}
 
 //Devuelve el número de nodos del árbol(un árbol vacío posee 0 nodos)
-int TABBPoro::Nodos()const{}
+int TABBPoro::Nodos()const{
+	return 1;
+}
 
 //Devuelve el número de nodos hoja en el árbol (la raiz puede ser un nodo hoja)
-int TABBPoro::NodosHoja()const{}
+int TABBPoro::NodosHoja()const{
+	return 1;
+}
 
 //Devuelve el recorrido en inorden
-TVectorPoro TABBPoro::Inorden()const{}
+TVectorPoro TABBPoro::Inorden()const{
+	TVectorPoro vp;
+	return vp;
+}
 
 //Devuelve el recorrido en preorden
-TVectorPoro TABBPoro::Preorden()const{}
+TVectorPoro TABBPoro::Preorden()const{
+	TVectorPoro vp;
+	return vp;
+}
 
 //Devuelve el recorrido en postorden
-TVectorPoro TABBPoro::Postorden()const{}
+TVectorPoro TABBPoro::Postorden()const{
+	TVectorPoro vp;
+	return vp;
+}
 
 //Suma de dos ABB
-TABBPoro TABBPoro::operator + (const TABBPoro &abbPoro){}
+TABBPoro TABBPoro::operator + (const TABBPoro &abbPoro){
+	TABBPoro abb;
+	return abb;
+}
 
 //Resta de dos ABB
-TABBPoro TABBPoro::operator - (const TABBPoro &abbPoro){}
+TABBPoro TABBPoro::operator - (const TABBPoro &abbPoro){
+	TABBPoro abb;
+	return abb;
+}
 /*...........................................................*/
 
 
