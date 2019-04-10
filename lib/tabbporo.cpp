@@ -36,6 +36,8 @@ TABBPoro::TABBPoro():nodo(NULL){}
 
 //Constructor de copia
 TABBPoro::TABBPoro(const TABBPoro &abbPoro){
+	//EL CONSTRUCTOR FALTA POR IMPLEMENTAR//
+
 	/*El constructor de copia debe copiar todos los nodos del árbol.
 	
 	if(this != &abbPoro){
@@ -45,7 +47,7 @@ TABBPoro::TABBPoro(const TABBPoro &abbPoro){
 //
 //Destructor
 TABBPoro::~TABBPoro(){
-	if(this->nodo != NULL) delete[] nodo;
+	//if(this->nodo != NULL) delete nodo;
 	this->nodo = NULL;
 }
 
@@ -68,71 +70,43 @@ bool TABBPoro::operator == (const TABBPoro &abbPoro){
 
 //Devuelve TRUE si el arbol está vacío
 bool TABBPoro::EsVacio()const{
-	return true;
+	if(this->nodo == NULL) return true;
+	return false;
 }
 
 //Inserta el elemento en el árbol
 bool TABBPoro::Insertar(const TPoro &poro){
-	TABBPoro auxAbb;
-	TNodoABB auxNodo;
-	cout << "1-" << endl;
+
 	//Si el árbol está vacío, se inserta en la raíz.
-	if(Altura() == 0){
-		cout << "2-" << endl; 
-		auxNodo.item = poro;
-		this->nodo = &auxNodo;
-		return true;
-
+	if((*this).EsVacio()) {
+		nodo = new TNodoABB();
+		nodo->item = poro;
+	}else{
+		//Comprobamos que no existe ya este poro.
+		TNodoABB *abbNodo = new TNodoABB();
+		abbNodo->item = poro;
+		auxInsertar(*abbNodo, *this );
 	}
-	
-	cout << "3-" << endl;
-	//Comprobamos que no existe ya este poro.
-	if(Buscar(poro))return false;
-
-	cout << "4-" << endl;
-
-	//Asignamos a item el primer elemento del árbol.
-	auxNodo.item = Raiz();
-	cout << "5-" << endl;
-
-	auxAbb.nodo = &auxNodo;
-
-	cout << "6-" << endl;
-
-
-	TNodoABB inserNodo;
-	inserNodo.item = poro;
-
-	return auxInsertar(inserNodo, auxAbb);
-	
-
+	return true;
 }
 
-bool TABBPoro::auxInsertar(const TNodoABB &insertNodo, const TABBPoro &arbol){
-
-	if(insertNodo.item.Volumen() ==  arbol.nodo->item.Volumen()) {
-		return false;
-
-	}
-	
-	if(insertNodo.item.Volumen() < arbol.nodo->item.Volumen() ){
-		
-		if(arbol.nodo->iz.EsVacio()){
-			arbol.nodo->iz.Insertar(insertNodo.item);
-			return true;
-		}else{
-			auxInsertar(insertNodo, arbol);	
-		}
-
+bool TABBPoro::auxInsertar(const TNodoABB &abbNodo, TABBPoro &arbol){
+	if(arbol.EsVacio()){
+		arbol.nodo = new TNodoABB(abbNodo);
 	}else{
 
-		if(arbol.nodo->de.EsVacio()){
-			arbol.nodo->de.Insertar(insertNodo.item);
-			return true;
-		}else{
-			auxInsertar(insertNodo, arbol);	
-		}	
-	}	
+		if(arbol.nodo->item.Volumen() != abbNodo.item.Volumen()) 
+		{
+			if(abbNodo.item.Volumen() < arbol.nodo->item.Volumen()){
+				cout << "iz" << endl;
+				auxInsertar(abbNodo, arbol.nodo->iz);
+			}
+			else{
+				cout << "de" << endl;
+				auxInsertar(abbNodo, arbol.nodo->de);
+			}
+		}			
+	}
 	return false;
 }
 
@@ -142,16 +116,35 @@ bool TABBPoro::Borrar(const TPoro &poro){
 	return false;
 }
 
+
 //Devuelve TRUE  si el elemento está en el árbol
-bool TABBPoro::Buscar(const TPoro &poro)const{
-	return false;
+bool TABBPoro::Buscar(const TPoro &poro){
+
+	return auxBuscar(poro, *this);
 }
+
+bool TABBPoro::auxBuscar(const TPoro &poro,  TABBPoro &abb){
+
+	if(abb.nodo == NULL) return false;
+	if(abb.nodo->item == poro) return true;
+	return(auxBuscar(poro, abb.nodo->iz) && auxBuscar(poro, abb.nodo->de) );
+	return true;
+}
+
 
 //Devuelve el elemento en la raíz del árbol
 TPoro TABBPoro::Raiz()const{
+
+	/*11.Raiz devuelve el TPoro raíz del árbol. Si el árbol está vacío, devuelve un TPoro vacío.*/
+
 	TPoro p;
 	return p;
 }
+
+
+
+
+
 
 //Devuelve la altura del árbol (la altura de un árbol vacío es 0)
 int TABBPoro::Altura()const{
@@ -197,6 +190,15 @@ TABBPoro TABBPoro::operator - (const TABBPoro &abbPoro){
 	TABBPoro abb;
 	return abb;
 }
+
+
+
+
+//Sobrecarga del operador de salida << 
+ostream & operator << (ostream &os,const TABBPoro &abb){
+	os << abb.nodo->item << endl;
+}	
+
 /*...........................................................*/
 
 

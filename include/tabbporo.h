@@ -7,6 +7,7 @@
 
 using namespace std;
 class TNodoABB;
+class TABBPoro;
 
 class TABBPoro{
 	friend class TNodoABB;
@@ -25,7 +26,9 @@ private:
 	//AUXILIAR: Devuelve el Anterior nodo.
 	TNodoABB Anterior()const;
 	//AUXILIAR: Insertar
-	bool auxInsertar(const TNodoABB &, const TABBPoro &);
+	bool auxInsertar(const TNodoABB &, TABBPoro &);
+	//AUXILIAR: Buscar
+	bool auxBuscar(const TPoro &,  TABBPoro &);
 
 public:
 	//Constructor
@@ -45,7 +48,7 @@ public:
 	//Borra el elemento en el árbol
 	bool Borrar(const TPoro &);
 	//Devuelve TRUE si el elemento está en el árbol	
-	bool Buscar(const TPoro &)const;
+	bool Buscar(const TPoro &);
 	//Devuelve el elemento en la raíz del árbol
 	TPoro Raiz()const;
 	//Devuelve la altura del árbol (la altura de un árbol vacío es 0)
@@ -66,20 +69,26 @@ public:
 	TABBPoro operator + (const TABBPoro &);
 	//Resta de dos ABB
 	TABBPoro operator - (const TABBPoro &);
+
+
+
 	
 //Sobrecarga del operador salida
-friend ostream & operator << (ostream &, TABBPoro &);	
+friend ostream & operator << (ostream &,const TABBPoro &);	
 
 };
 
 class TNodoABB{
 	friend class TABBPoro;
 private:
-	//El elemento del nodo
-	TPoro item;
+
 	//Subárbol izquierdo y derecho
 	TABBPoro iz, de;
 public:
+
+	//El elemento del nodo
+	TPoro item;
+
 	//Constructor por defecto
 	TNodoABB();
 	//Constructor de copia

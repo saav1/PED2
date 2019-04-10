@@ -1,22 +1,29 @@
 #include <iostream>
-
-using namespace std;
-
 #include "tporo.h"
 #include "tvectorporo.h"
+#include "tabbporo.h"
+using namespace std;
 
-int
-main(void)
-{
-  TPoro a(1, 2, 3, "rojo");
-  TVectorPoro v(5), w;
+int main(void){
 
-  v[1] = a;
-  v[2] = a;
-  v[3] = a;
-  v[4] = a;
-  v[5] = a;
+  TPoro a(1, 2, 1, "a"); //Se pondrá en la raíz.
+  TPoro b(2, 3, 2, "b"); //Se pondrá a la derecha del 'a'.
+  TPoro c(4, 5, 0, "c"); //Se pondrá a la izquierda del 'a'.
+  TPoro d(1, 2, 3, "s");
+  TABBPoro abb;
+  
+  abb.Insertar(a);
+  abb.Insertar(b);
+  abb.Insertar(c);
 
-v.Redimensionar(1);
-  cout << v << endl;
+  bool var = abb.Buscar(a);
+  cout << var << endl;
+
+
+  bool var1 = abb.Buscar(d);
+  cout << var1 << endl;
+
+  
+
+return 0;
 }
