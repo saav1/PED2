@@ -21,14 +21,6 @@ private:
 	//AUXILIAR: Devuleve el recorrido en postorden
 	void PostordenAux(TVectorPoro &, int &);
 
-	//AUXILIAR: Devuelve el siguiente nodo.
-	TNodoABB Siguiente()const;
-	//AUXILIAR: Devuelve el Anterior nodo.
-	TNodoABB Anterior()const;
-	//AUXILIAR: Insertar
-	bool auxInsertar(const TNodoABB &, TABBPoro &);
-	//AUXILIAR: Buscar
-	bool auxBuscar(const TPoro &,  TABBPoro &);
 
 public:
 	//Constructor

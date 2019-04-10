@@ -38,11 +38,11 @@ TABBPoro::TABBPoro():nodo(NULL){}
 TABBPoro::TABBPoro(const TABBPoro &abbPoro){
 	//EL CONSTRUCTOR FALTA POR IMPLEMENTAR//
 
-	/*El constructor de copia debe copiar todos los nodos del árbol.
+	//El constructor de copia debe copiar todos los nodos del árbol.
 	
 	if(this != &abbPoro){
-		this->nodo = abbPoro.nodo;
-	}*/
+		this->nodo = new TNodoABB(*abbPoro.nodo);
+	}
 }
 //
 //Destructor
@@ -65,7 +65,6 @@ bool TABBPoro::operator == (const TABBPoro &abbPoro){
 		(this->nodo != NULL && abbPoro.nodo != NULL)) &&
 		(this->nodo == abbPoro.nodo) ) ? true : false;
 	return iguales;
-
 } 
 
 //Devuelve TRUE si el arbol está vacío
@@ -76,38 +75,30 @@ bool TABBPoro::EsVacio()const{
 
 //Inserta el elemento en el árbol
 bool TABBPoro::Insertar(const TPoro &poro){
+	if((*this).EsVacio()){
 
-	//Si el árbol está vacío, se inserta en la raíz.
-	if((*this).EsVacio()) {
-		nodo = new TNodoABB();
-		nodo->item = poro;
-	}else{
-		//Comprobamos que no existe ya este poro.
 		TNodoABB *abbNodo = new TNodoABB();
 		abbNodo->item = poro;
-		auxInsertar(*abbNodo, *this );
-	}
-	return true;
-}
+		this->nodo = abbNodo;
+		return true;
 
-bool TABBPoro::auxInsertar(const TNodoABB &abbNodo, TABBPoro &arbol){
-	if(arbol.EsVacio()){
-		arbol.nodo = new TNodoABB(abbNodo);
 	}else{
 
-		if(arbol.nodo->item.Volumen() != abbNodo.item.Volumen()) 
-		{
-			if(abbNodo.item.Volumen() < arbol.nodo->item.Volumen()){
+		if((*this).nodo->item.Volumen() != poro.Volumen()){
+
+			if(poro.Volumen() < this->nodo->item.Volumen()){
+
 				cout << "iz" << endl;
-				auxInsertar(abbNodo, arbol.nodo->iz);
-			}
-			else{
+				return this->nodo->iz.Insertar(poro);
+
+			}else{
 				cout << "de" << endl;
-				auxInsertar(abbNodo, arbol.nodo->de);
-			}
-		}			
+				return this->nodo->de.Insertar(poro);
+			} 
+		}
+
+		return false;
 	}
-	return false;
 }
 
 
@@ -119,12 +110,18 @@ bool TABBPoro::Borrar(const TPoro &poro){
 
 //Devuelve TRUE  si el elemento está en el árbol
 bool TABBPoro::Buscar(const TPoro &poro){
+	
+	if(this->nodo == NULL) return false;
+	if((*this).nodo->item == poro) return true;
 
-	return auxBuscar(poro, *this);
+	if(poro.Volumen() < (*this).nodo->item.Volumen())
+		return (*this).nodo->iz.Buscar(poro);
+	else 
+		return (*this).nodo->de.Buscar(poro);
+	
 }
 
 bool TABBPoro::auxBuscar(const TPoro &poro,  TABBPoro &abb){
-
 	if(abb.nodo == NULL) return false;
 	if(abb.nodo->item == poro) return true;
 	return(auxBuscar(poro, abb.nodo->iz) && auxBuscar(poro, abb.nodo->de) );
@@ -134,15 +131,12 @@ bool TABBPoro::auxBuscar(const TPoro &poro,  TABBPoro &abb){
 
 //Devuelve el elemento en la raíz del árbol
 TPoro TABBPoro::Raiz()const{
-
-	/*11.Raiz devuelve el TPoro raíz del árbol. Si el árbol está vacío, devuelve un TPoro vacío.*/
-
-	TPoro p;
-	return p;
+	TPoro poro;
+	if(!(*this).EsVacio()){
+		poro = nodo->item;
+	}
+	return poro;
 }
-
-
-
 
 
 

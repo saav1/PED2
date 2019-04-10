@@ -12,18 +12,11 @@ int main(void){
   TPoro d(1, 2, 3, "s");
   TABBPoro abb;
   
-  abb.Insertar(a);
-  abb.Insertar(b);
-  abb.Insertar(c);
+ 
+   cout << abb.Insertar(a) << endl;
+   cout << abb.Insertar(b) << endl;
+   cout << abb.Insertar(c) << endl;
 
-  bool var = abb.Buscar(a);
-  cout << var << endl;
-
-
-  bool var1 = abb.Buscar(d);
-  cout << var1 << endl;
-
-  
 
 return 0;
 }
