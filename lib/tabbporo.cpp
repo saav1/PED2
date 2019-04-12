@@ -142,7 +142,17 @@ TPoro TABBPoro::Raiz()const{
 
 //Devuelve la altura del árbol (la altura de un árbol vacío es 0)
 int TABBPoro::Altura()const{
-	return 0;
+	int i = 0;
+	if(!(*this).EsVacio()){
+		//Que pasa cuando el árbol no es vacío. 
+		i++;
+		if(!(*this).nodo->iz.EsVacio()) 
+			i += (*this).nodo->iz.Altura();
+		else
+			i += (*this).nodo->de.Altura();
+
+	}
+	return i;
 }
 
 //Devuelve el número de nodos del árbol(un árbol vacío posee 0 nodos)
