@@ -87,12 +87,9 @@ bool TABBPoro::Insertar(const TPoro &poro){
 		if((*this).nodo->item.Volumen() != poro.Volumen()){
 
 			if(poro.Volumen() < this->nodo->item.Volumen()){
-
-				cout << "iz" << endl;
 				return this->nodo->iz.Insertar(poro);
 
 			}else{
-				cout << "de" << endl;
 				return this->nodo->de.Insertar(poro);
 			} 
 		}
@@ -121,13 +118,6 @@ bool TABBPoro::Buscar(const TPoro &poro){
 	
 }
 
-bool TABBPoro::auxBuscar(const TPoro &poro,  TABBPoro &abb){
-	if(abb.nodo == NULL) return false;
-	if(abb.nodo->item == poro) return true;
-	return(auxBuscar(poro, abb.nodo->iz) && auxBuscar(poro, abb.nodo->de) );
-	return true;
-}
-
 
 //Devuelve el elemento en la raíz del árbol
 TPoro TABBPoro::Raiz()const{
@@ -150,14 +140,24 @@ int TABBPoro::Altura()const{
 			i += (*this).nodo->iz.Altura();
 		else
 			i += (*this).nodo->de.Altura();
-
 	}
+
 	return i;
 }
 
 //Devuelve el número de nodos del árbol(un árbol vacío posee 0 nodos)
 int TABBPoro::Nodos()const{
-	return 1;
+	int i = 0;
+	if(!(*this).EsVacio()){
+		i++;
+		if((*this).nodo->iz.EsVacio() && (*this).nodo->de.EsVacio())
+			return i;
+		else{
+			i += (*this).nodo->iz.Nodos() + (*this).nodo->de.Nodos();
+			return i;
+		}
+	}
+	return i;
 }
 
 //Devuelve el número de nodos hoja en el árbol (la raiz puede ser un nodo hoja)
