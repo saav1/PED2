@@ -36,10 +36,7 @@ TABBPoro::TABBPoro():nodo(NULL){}
 
 //Constructor de copia
 TABBPoro::TABBPoro(const TABBPoro &abbPoro){
-	//EL CONSTRUCTOR FALTA POR IMPLEMENTAR//
 
-	//El constructor de copia debe copiar todos los nodos del árbol.
-	
 	if(this != &abbPoro){
 		this->nodo = new TNodoABB(*abbPoro.nodo);
 	}
@@ -118,7 +115,6 @@ bool TABBPoro::Buscar(const TPoro &poro){
 	
 }
 
-
 //Devuelve el elemento en la raíz del árbol
 TPoro TABBPoro::Raiz()const{
 	TPoro poro;
@@ -127,8 +123,6 @@ TPoro TABBPoro::Raiz()const{
 	}
 	return poro;
 }
-
-
 
 //Devuelve la altura del árbol (la altura de un árbol vacío es 0)
 int TABBPoro::Altura()const{
@@ -162,7 +156,15 @@ int TABBPoro::Nodos()const{
 
 //Devuelve el número de nodos hoja en el árbol (la raiz puede ser un nodo hoja)
 int TABBPoro::NodosHoja()const{
-	return 1;
+	int i = 0;
+	if(!(*this).EsVacio()){
+		if((*this).nodo->iz.EsVacio() && (*this).nodo->de.EsVacio())
+			return 1;
+		else
+			return ((*this).nodo->iz.NodosHoja() + (*this).nodo->de.NodosHoja());
+
+	}
+	return i;
 }
 
 //Devuelve el recorrido en inorden
@@ -194,9 +196,6 @@ TABBPoro TABBPoro::operator - (const TABBPoro &abbPoro){
 	TABBPoro abb;
 	return abb;
 }
-
-
-
 
 //Sobrecarga del operador de salida << 
 ostream & operator << (ostream &os,const TABBPoro &abb){
