@@ -2,6 +2,7 @@
 #define _TABBPoro_
 
 #include <iostream>
+#include <queue>
 #include "tporo.h"
 #include "tvectorporo.h"
 
@@ -9,18 +10,19 @@ using namespace std;
 class TNodoABB;
 class TABBPoro;
 
+
 class TABBPoro{
-	friend class TNodoABB;
+friend class TNodoABB;
+friend ostream & operator << (ostream &,const TABBPoro &);
 private:
 	//Puntero al nodo
 	TNodoABB *nodo;
 	//AUXILIAR: Devuelve el recorrido en inorden
-	void InordenAux(TVectorPoro &, int &);
+	void InordenAux(TVectorPoro &, int &)const;
 	//AUXILIAR: Devuelve el recorrido en preorden
-	void PreordenAux(TVectorPoro &, int &);
+	void PreordenAux(TVectorPoro &, int &)const;
 	//AUXILIAR: Devuleve el recorrido en postorden
-	void PostordenAux(TVectorPoro &, int &);
-
+	void PostordenAux(TVectorPoro &, int &)const;
 
 public:
 	//Constructor
@@ -61,26 +63,20 @@ public:
 	TABBPoro operator + (const TABBPoro &);
 	//Resta de dos ABB
 	TABBPoro operator - (const TABBPoro &);
-
-
-
-	
-//Sobrecarga del operador salida
-friend ostream & operator << (ostream &,const TABBPoro &);	
-
 };
 
+
+
 class TNodoABB{
-	friend class TABBPoro;
+friend class TABBPoro;
 private:
 
+
+public:
 	//Subárbol izquierdo y derecho
 	TABBPoro iz, de;
-public:
-
 	//El elemento del nodo
 	TPoro item;
-
 	//Constructor por defecto
 	TNodoABB();
 	//Constructor de copia
@@ -90,5 +86,6 @@ public:
 	//Sobrecarga del operador de asignación
 	TNodoABB & operator = (const TNodoABB &);
 };
+
 
 #endif 

@@ -47,7 +47,6 @@ public:
 	TPoro operator [] (int) const;
 	//Devuelve la Longitud(dimension) del vector
 	int Longitud()const;
-
 	//Devuelve la cantidad de posiciones ocupadas (no vacías) en el vector
 	int Cantidad()const;
 	//REDIMENSIONAR el vector de TPoro

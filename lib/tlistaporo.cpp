@@ -118,10 +118,11 @@ TListaPoro & TListaPoro::operator = (const TListaPoro &listaPoro){
 
   TListaPosicion listapos = listaPoro.Primera();
   for(int i = 0 ; i < listaPoro.Longitud(); i++){
-    Insertar(listapos.pos->e);
+    (*this).Insertar(listapos.pos->e);
     listapos = listapos.Siguiente();
   }
 
+  return *this;
 }
 
 //Métdodo
@@ -131,16 +132,11 @@ bool TListaPoro::operator == (const TListaPoro &listaPoro){
 
   bool equals = true;
 
-  if(this->Longitud() != listaPoro.Longitud()){
-    return false;
-  }
-
+  if(this->Longitud() != listaPoro.Longitud()) return false;
+  
   for(int i = 0 ; i < Longitud()  ; i++){
-
-    if(iPos.pos->e != jPos.pos->e){
-      return false;
-    }
-
+    if(iPos.pos->e != jPos.pos->e) return false;
+  
     iPos = iPos.Siguiente();
     jPos = jPos.Siguiente();
   }
@@ -188,22 +184,17 @@ TListaPoro TListaPoro::operator - (const TListaPoro &listaPoro){
     bool found = false;
 
     for(int j = 0 ; j < listaPoro.Longitud(); j++){
-      if(listaUno.pos->e == listaDos.pos->e){
-        found = true;
-      }
+      if(listaUno.pos->e == listaDos.pos->e) found = true;
+      
       listaDos = listaDos.Siguiente();
     }
 
-    if(found == false){
-      newLista.Insertar(listaUno.pos->e);
-    }
-
-
+    if(found == false) newLista.Insertar(listaUno.pos->e);
+    
     listaUno = listaUno.Siguiente();
   }
 
   return newLista;
-
 }
 
 bool TListaPoro::EsVacia() const {

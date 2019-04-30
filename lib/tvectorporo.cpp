@@ -133,4 +133,5 @@ ostream & operator << ( ostream &os, const TVectorPoro & vectorPoro ){
     }
   }
   os << "]";
+  return os;
 }

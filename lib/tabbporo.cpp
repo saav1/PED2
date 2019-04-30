@@ -20,26 +20,28 @@ TNodoABB::~TNodoABB(){
 }
 
 //Sobrecarga del operador de asignación
-TNodoABB & TNodoABB::operator = (const TNodoABB &nodoAbb){
-	if(this != &nodoAbb){
-		this->item = nodoAbb.item;
-		this->iz = nodoAbb.iz;
-		this->de = nodoAbb.de;
-	}
-	return(*this);
+TNodoABB & TNodoABB::operator = ( const TNodoABB &nodoAbb){
+
+	(*this).~TNodoABB();
+	this->item = nodoAbb.item;
+	this->iz = nodoAbb.iz;
+	this->de = nodoAbb.de;
+	return *this;
+	
 }
+
 /*...........................................................*/
 
 /*....................TABBPoro...............................*/					
 //Constructor
-TABBPoro::TABBPoro():nodo(NULL){}
+TABBPoro::TABBPoro(){
+	this->nodo = NULL;
+}
 
 //Constructor de copia
 TABBPoro::TABBPoro(const TABBPoro &abbPoro){
-
-	if(this != &abbPoro){
-		this->nodo = new TNodoABB(*abbPoro.nodo);
-	}
+	(*this).~TABBPoro();
+	this->nodo = new TNodoABB(*abbPoro.nodo);
 }
 //
 //Destructor
@@ -50,17 +52,25 @@ TABBPoro::~TABBPoro(){
 
 //Sobrecarga del operador asignación
 TABBPoro & TABBPoro::operator = (const TABBPoro &abbPoro){
-	if(this != &abbPoro){
-		this->nodo = abbPoro.nodo;
+	if(*this == abbPoro) return *this;
+	else{
+		(*this).~TABBPoro();
+		this->nodo = new TNodoABB(*abbPoro.nodo);
+		return *this;
 	}
-	return(*this);
 }  	
 
-//Sobrecarga del operador igualdad
+//Sobrecarga del operador igualdad.
+/* 8.En el operador '==', dos árboles son iguales si poseen los mismos elementos
+independientemente de la esturctura interna del árbol (No se exige que la
+estructura de ambos sea la misma).*/
 bool TABBPoro::operator == (const TABBPoro &abbPoro){
-	bool iguales = (( (this->nodo == NULL && abbPoro.nodo == NULL) || 
-		(this->nodo != NULL && abbPoro.nodo != NULL)) &&
-		(this->nodo == abbPoro.nodo) ) ? true : false;
+	bool iguales = 
+	(	(*this).Raiz() == abbPoro.Raiz() && 
+		(*this).Nodos() == abbPoro.Nodos() && 
+		(*this).NodosHoja() == abbPoro.NodosHoja() 
+	) ? true : false;
+
 	return iguales;
 } 
 
@@ -73,16 +83,12 @@ bool TABBPoro::EsVacio()const{
 //Inserta el elemento en el árbol
 bool TABBPoro::Insertar(const TPoro &poro){
 	if((*this).EsVacio()){
-
 		TNodoABB *abbNodo = new TNodoABB();
 		abbNodo->item = poro;
 		this->nodo = abbNodo;
 		return true;
-
 	}else{
-
 		if((*this).nodo->item.Volumen() != poro.Volumen()){
-
 			if(poro.Volumen() < this->nodo->item.Volumen()){
 				return this->nodo->iz.Insertar(poro);
 
@@ -90,37 +96,76 @@ bool TABBPoro::Insertar(const TPoro &poro){
 				return this->nodo->de.Insertar(poro);
 			} 
 		}
-
 		return false;
 	}
 }
 
 
-//Borra el elemento del árbol
+//Borra el elemento del árbol. Mayor de la IZQUIERDA.
 bool TABBPoro::Borrar(const TPoro &poro){
+	if( !Buscar(poro) ) return false;
+	if( (*this).Raiz() == poro ){
+		
+		if((*this).Nodos() == 1 && (*this).NodosHoja()  == 1){
+			(*this).~TABBPoro();
+			return true;
+		}
+		if((*this).Nodos() == 2 && (*this).NodosHoja() == 1){
+			TABBPoro *auxAbb = new TABBPoro();
+			if((*this).nodo->iz.EsVacio()) *auxAbb = (*this).nodo->de;
+			else{
+				*auxAbb = (*this).nodo->iz;
+				(*this).nodo = auxAbb->nodo;
+			}
+			return true;
+		}
+		else{
+			//Puntero Auxiliar
+			TABBPoro *auxAbb;
+			
+			//El puntero auxiliar apunta al dirección de memoria, de la izquierda del abb.
+			auxAbb = &((*this).nodo->iz);
+			
+			//Apuntando a dirección de memoria, busco el árbol que está mas a la derecha.
+			while( !(*auxAbb).nodo->de.EsVacio() ) auxAbb = &((*auxAbb).nodo->de); 
+			
+			//Asigno el item el item que va a ser suistituido.
+			(*this).nodo->item = (*auxAbb).nodo->item;
+
+			//LLamo al destructor del árbol. Del árbol sustituido. Más grande de la izquierda.
+			if( (*auxAbb).Nodos() == 1 ){
+				//No tiene hijos.
+				(*auxAbb).~TABBPoro();
+			}else{
+				//Tiene hijos. LLamada recursiva.
+				(*auxAbb).Borrar((*auxAbb).nodo->item);
+			}
+			return true;
+		}
+	}
+
+	if((*this).nodo->de.Buscar(poro)) return (*this).nodo->de.Borrar(poro);	
+	if((*this).nodo->iz.Buscar(poro)) return (*this).nodo->iz.Borrar(poro);
+
 	return false;
 }
 
 
+
+
 //Devuelve TRUE  si el elemento está en el árbol
 bool TABBPoro::Buscar(const TPoro &poro){
-	
 	if(this->nodo == NULL) return false;
-	if((*this).nodo->item == poro) return true;
+	if((*this).Raiz() == poro) return true;
 
-	if(poro.Volumen() < (*this).nodo->item.Volumen())
-		return (*this).nodo->iz.Buscar(poro);
-	else 
-		return (*this).nodo->de.Buscar(poro);
-	
+	if(poro.Volumen() < (*this).nodo->item.Volumen()) return (*this).nodo->iz.Buscar(poro);
+	else return (*this).nodo->de.Buscar(poro);
 }
 
 //Devuelve el elemento en la raíz del árbol
 TPoro TABBPoro::Raiz()const{
 	TPoro poro;
-	if(!(*this).EsVacio()){
-		poro = nodo->item;
-	}
+	if(!(*this).EsVacio()) poro = nodo->item;
 	return poro;
 }
 
@@ -128,14 +173,13 @@ TPoro TABBPoro::Raiz()const{
 int TABBPoro::Altura()const{
 	int i = 0;
 	if(!(*this).EsVacio()){
-		//Que pasa cuando el árbol no es vacío. 
-		i++;
-		if(!(*this).nodo->iz.EsVacio()) 
+		i = 1;
+		if((*this).nodo->iz.Altura() > (*this).nodo->de.Altura()){
 			i += (*this).nodo->iz.Altura();
-		else
+		}else{
 			i += (*this).nodo->de.Altura();
+		}
 	}
-
 	return i;
 }
 
@@ -144,8 +188,7 @@ int TABBPoro::Nodos()const{
 	int i = 0;
 	if(!(*this).EsVacio()){
 		i++;
-		if((*this).nodo->iz.EsVacio() && (*this).nodo->de.EsVacio())
-			return i;
+		if((*this).nodo->iz.EsVacio() && (*this).nodo->de.EsVacio()) return i;
 		else{
 			i += (*this).nodo->iz.Nodos() + (*this).nodo->de.Nodos();
 			return i;
@@ -158,52 +201,122 @@ int TABBPoro::Nodos()const{
 int TABBPoro::NodosHoja()const{
 	int i = 0;
 	if(!(*this).EsVacio()){
-		if((*this).nodo->iz.EsVacio() && (*this).nodo->de.EsVacio())
-			return 1;
-		else
-			return ((*this).nodo->iz.NodosHoja() + (*this).nodo->de.NodosHoja());
-
+		if((*this).nodo->iz.EsVacio() && (*this).nodo->de.EsVacio()) return 1;
+		else return ((*this).nodo->iz.NodosHoja() + (*this).nodo->de.NodosHoja());
 	}
 	return i;
 }
 
-//Devuelve el recorrido en inorden
+
+/*12.Los 4 recorridos devuelven un vector(TVectorPoro) en el que todas las posiciones
+están ocupadas por los elementos del árbol(no pueden quedar posiciones sin asignar).
+Si el árbol está vacío, se devuelve un vector vacío(vector de dimensión 0).*/
+/*.........................RECORRIDO - INORDEN.............................*/
 TVectorPoro TABBPoro::Inorden()const{
-	TVectorPoro vp;
-	return vp;
+	//Posición en el vector que almacena el recorrido
+	int pos = 0;
+	//Vector del tamaño adecuado para almacenar todos los nodos
+	TVectorPoro v((*this).Nodos());
+	InordenAux(v, pos);
+	return v;
 }
-
-//Devuelve el recorrido en preorden
+void TABBPoro::InordenAux(TVectorPoro &v, int &pos)const{
+	if( !(*this).EsVacio() ){
+		(*this).nodo->iz.InordenAux(v, pos);
+		v[pos++] = (*this).Raiz();
+		(*this).nodo->de.InordenAux(v, pos);
+	}
+}
+/*.........................RECORRIDO - PREORDEN.............................*/
 TVectorPoro TABBPoro::Preorden()const{
-	TVectorPoro vp;
-	return vp;
+	int pos = 0;
+	TVectorPoro v((*this).Nodos());
+	PreordenAux(v, pos);
+	return v;
 }
-
-//Devuelve el recorrido en postorden
+void TABBPoro::PreordenAux(TVectorPoro &v, int &pos)const{
+	if( !(*this).EsVacio() ){
+		v[pos++] = (*this).Raiz();
+		(*this).nodo->iz.PreordenAux(v, pos);
+		(*this).nodo->de.PreordenAux(v, pos);
+	}
+}
+/*.........................RECORRIDO - POSTORDEN............................*/
 TVectorPoro TABBPoro::Postorden()const{
-	TVectorPoro vp;
-	return vp;
+	int pos = 0;
+	TVectorPoro v((*this).Nodos());
+	PostordenAux(v, pos);
+	return v;
 }
-
+void TABBPoro::PostordenAux(TVectorPoro &v, int &pos)const{
+	if( !(*this).EsVacio() ){
+		(*this).nodo->iz.PostordenAux(v, pos);
+		(*this).nodo->de.PostordenAux(v, pos);
+		v[pos++] = (*this).Raiz();
+	}
+}
 //Suma de dos ABB
+/*15.En el operador '+' primero se tiene que sacar una copia del operando(árbol) de la 
+izquierda y a continuación insertar los elementos del operando(árbol) de la derecha
+según su recorrido por INORDEN.
+*/
 TABBPoro TABBPoro::operator + (const TABBPoro &abbPoro){
-	TABBPoro abb;
-	return abb;
+	TABBPoro abb(abbPoro);
+	TVectorPoro v;
+	v = abb.Inorden();
+
+	for(int i = 0; i < v.Longitud(); i++){
+		(*this).Insertar(v[i]);
+	}
+	return *this;
 }
 
 //Resta de dos ABB
+/*
+16.En el operador '-' se recorre el operando(árbol) de la izquierda por INORDEN y si 
+el elemento NO está en el operando(árbol) de la derecha, se inserta en el árbol resultante
+(incialmente vacío) y el proceso se repite para todos los elementos del operando de la 
+izquierda.*/
 TABBPoro TABBPoro::operator - (const TABBPoro &abbPoro){
-	TABBPoro abb;
-	return abb;
+	TABBPoro auxAbb;
+	TVectorPoro v;
+	v = abbPoro.Inorden();
+	for(int i = 0; i < v.Longitud(); i++){
+		if( !((*this).Buscar(v[i])) ){
+			auxAbb.Insertar(v[i]);
+		}
+	}
+	(*this).~TABBPoro();
+	return auxAbb;
 }
 
 //Sobrecarga del operador de salida << 
+/*13.El operador SALIDA muestra el recorrido por NIVELES del ABB, con el formato
+pedido en el CUADERNILLO 1 para la clase TVectorPoro.*/
+
 ostream & operator << (ostream &os,const TABBPoro &abb){
-	os << abb.nodo->item << endl;
-}	
+	int i = 1;
+	queue<TABBPoro> cola;
+	TABBPoro *auxAbb = new TABBPoro(abb);
+	cola.push(*auxAbb);
+	os << "[";
+	while(!cola.empty()){
+		*auxAbb = cola.front();
+		if(abb.Raiz() != auxAbb->Raiz())os << " ";
+		os << i << " " << auxAbb->Raiz();
+		i++;
+		cola.pop();
+		if(!(auxAbb->nodo->iz.EsVacio())) cola.push(auxAbb->nodo->iz);
+		if(!(auxAbb->nodo->de.EsVacio()))cola.push(auxAbb->nodo->de);
+	}
+	os << "]";
+	return os;
+}
+
+
+
 
 /*...........................................................*/
-
 
 
 /*	
@@ -282,34 +395,4 @@ el elemento NO está en el operando(árbol) de la derecha, se inserta en el árb
 izquierda.
 
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
