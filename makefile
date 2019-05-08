@@ -1,11 +1,11 @@
 .PHONY= doc clean
 
 CC=g++
-OPTIONS= -g 
+OPTIONS= -g
 DEBUG= #-D DEBUG
 LIBDIR=lib
 INCLUDEDIR=include
-_OBJ= tporo.o tvectorporo.o tlistaporo.o 
+_OBJ= tporo.o tvectorporo.o tlistaporo.o tabbporo.o
 OBJ = $(patsubst %,$(LIBDIR)/%,$(_OBJ))
 
 tad:    src/tad.cpp $(OBJ)
@@ -18,4 +18,4 @@ doc:
 	doxygen
 
 clean:
-	rm -f $(OBJ) 
+	rm -f $(OBJ)

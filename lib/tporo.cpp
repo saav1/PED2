@@ -48,11 +48,12 @@ TPoro & TPoro::operator = (const TPoro &poro){
 //Sobrecarga del operador igualdad
 bool TPoro::operator == (const TPoro &poro){
 
-	bool colorIgual = ((color == NULL && poro.Color() == NULL) || (color != NULL &&
-	 poro.Color() != NULL && strcmp(color, poro.Color()) == 0 )) ? true : false;
 
-	bool datosIgual = (x == poro.PosicionX() && y == poro.PosicionY() &&
-	 volumen == poro.Volumen()) ? true : false;
+	bool colorIgual = ((Color() == NULL && poro.Color() == NULL) || (Color()  != NULL &&
+	 poro.Color() != NULL && strcmp(Color() , poro.Color()) == 0 )) ? true : false;
+
+	bool datosIgual = (PosicionX() == poro.PosicionX() && PosicionY() == poro.PosicionY() &&
+	 Volumen() == poro.Volumen()) ? true : false;
 
 	return (colorIgual && datosIgual);
 }

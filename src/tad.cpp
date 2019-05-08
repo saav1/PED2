@@ -4,22 +4,18 @@ using namespace std;
 
 #include "tporo.h"
 #include "tvectorporo.h"
-#include "tlistaporo.h"
+
 int
 main(void)
 {
-  TPoro p(1, 1, 1), q(2, 2, 2), r(3, 3, 3);
-  TListaPoro a, b, c;
+  TPoro a(1, 2, 3, "rojo");
+  TVectorPoro v(5), w;
 
-  cout << a.Longitud() << endl;
-  cout << b.Longitud() << endl;
-  cout << c.Longitud() << endl;
+  cout << "Longitud: " << v.Longitud() << endl;
+  cout << "Longitud: " << w.Longitud() << endl;
 
-  a.Insertar(p);
-  b.Insertar(p); b.Insertar(q);
-  c.Insertar(p); c.Insertar(q); c.Insertar(r);
+  w = v;
 
-  cout << a.Longitud() << endl;
-  cout << b.Longitud() << endl;
-  cout << c.Longitud() << endl;
+  cout << "Longitud: " << v.Longitud() << endl;
+  cout << "Longitud: " << w.Longitud() << endl;
 }

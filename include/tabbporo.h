@@ -1,16 +1,11 @@
+//STALYN ALEJANDRO ALCOCER VALENCIA DNI: 20947870E
 #ifndef _TABBPoro_
 #define _TABBPoro_
-
 #include <iostream>
 #include <queue>
-#include "tporo.h"
 #include "tvectorporo.h"
-
 using namespace std;
 class TNodoABB;
-class TABBPoro;
-
-
 class TABBPoro{
 friend class TNodoABB;
 friend ostream & operator << (ostream &,const TABBPoro &);
@@ -23,6 +18,8 @@ private:
 	void PreordenAux(TVectorPoro &, int &)const;
 	//AUXILIAR: Devuleve el recorrido en postorden
 	void PostordenAux(TVectorPoro &, int &)const;
+	//AUXILIAR: Imprimri;
+	void Imprimir(ostream &)const;
 
 public:
 	//Constructor
@@ -41,7 +38,7 @@ public:
 	bool Insertar(const TPoro &);
 	//Borra el elemento en el árbol
 	bool Borrar(const TPoro &);
-	//Devuelve TRUE si el elemento está en el árbol	
+	//Devuelve TRUE si el elemento está en el árbol
 	bool Buscar(const TPoro &);
 	//Devuelve el elemento en la raíz del árbol
 	TPoro Raiz()const;
@@ -65,18 +62,14 @@ public:
 	TABBPoro operator - (const TABBPoro &);
 };
 
-
-
 class TNodoABB{
 friend class TABBPoro;
 private:
-
-
-public:
 	//Subárbol izquierdo y derecho
 	TABBPoro iz, de;
 	//El elemento del nodo
 	TPoro item;
+public:
 	//Constructor por defecto
 	TNodoABB();
 	//Constructor de copia
@@ -88,4 +81,4 @@ public:
 };
 
 
-#endif 
+#endif

@@ -5,7 +5,7 @@ TVectorPoro::TVectorPoro(): dimension(0),datos(NULL),error(){}
 
 //Si la dimensión es menor o igual que 0, se creará un vector de dimensión 0.
 TVectorPoro::TVectorPoro(int dim){
-	
+
   if(dim < 0) {
 	this->dimension = 0;
 	this->datos = NULL;
@@ -51,7 +51,6 @@ bool TVectorPoro::operator == (const TVectorPoro &vectorPoro){
     for(int i = 0;  i < this->dimension; i++)
       if(this->datos[i] != vectorPoro.datos[i]) datosIgual = false;
   }
-
   return (datosIgual && dimIgual);
 }
 
@@ -62,8 +61,6 @@ bool TVectorPoro::operator !=( const TVectorPoro &vectorPoro){
 
 //Sobrecarga del operador corchete (parte IZQUIERDA)
 TPoro & TVectorPoro::operator [] (int i){
-
-
  if((i > 0 && i <= dimension)){
    return datos[i-1];
   }else{
@@ -73,8 +70,6 @@ TPoro & TVectorPoro::operator [] (int i){
 
 //Sobrecarga del operador corchete (parte DERECHA)
 TPoro TVectorPoro::operator [] (int i) const{
-
-
  if((i > 0 && i <= dimension)){
    return datos[i-1];
   }else{
